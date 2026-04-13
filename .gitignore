@@ -3,6 +3,13 @@ logs
 *.log
 npm-debug.log*
 
+# Environment files
+.env
+backend/.env
+
+# Backend database
+backend/data/
+
 # Dependencies
 node_modules
 .pnp
