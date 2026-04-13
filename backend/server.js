@@ -4,6 +4,12 @@ const cors = require('cors');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 
+// Fail fast if required environment variables are missing in production
+if (process.env.NODE_ENV === 'production' && !process.env.JWT_SECRET) {
+  console.error('FATAL: JWT_SECRET must be set in production. Exiting.');
+  process.exit(1);
+}
+
 const studentsRouter = require('./routes/students');
 const attendanceRouter = require('./routes/attendance');
 const reportsRouter = require('./routes/reports');

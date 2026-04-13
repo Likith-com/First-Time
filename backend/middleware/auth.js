@@ -1,5 +1,12 @@
 const jwt = require('jsonwebtoken');
 
+if (!process.env.JWT_SECRET && process.env.NODE_ENV === 'production') {
+  console.error('FATAL: JWT_SECRET environment variable is not set. Exiting.');
+  process.exit(1);
+}
+
+const JWT_SECRET = process.env.JWT_SECRET || 'dev-only-insecure-secret';
+
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
@@ -9,7 +16,7 @@ const authenticateToken = (req, res, next) => {
   }
 
   try {
-    const user = jwt.verify(token, process.env.JWT_SECRET || 'fallback-secret');
+    const user = jwt.verify(token, JWT_SECRET);
     req.user = user;
     next();
   } catch (err) {
